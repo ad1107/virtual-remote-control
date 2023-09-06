@@ -1,6 +1,5 @@
 # Virtual Remote Control
-Virtual Remote Control using your phone or any other devices from your local network to connect and control the target computer.\
-Uses Flask for connecting local networks.\
+Virtual Remote Control allows your phone or any other devices from your local network to connect and control the target computer using Flask.\
 Useful for [Kodi](https://kodi.tv/) or [Youtube TV*](https://www.youtube.com/tv).\
 \
 **For Youtube TV on your web browser, [install this extension](https://chrome.google.com/webstore/detail/youtube-for-tv-4k/pdpkefmdjkgijhnhjkblpielhiikadbb).*
