@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {#Avoid any automatic zoom in#}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Virtual Remote Control</title>
+    <style>
+        /* Global button scaling variables */
+        :root {
+            --button-size: 60px; /* Adjust the button size here */
+            --container-height: 300px; /* Adjust the container height here */
+            --dark-mode-bg: #595959; /* Dark mode background color */
+            --dark-mode-text: #fff; /* Dark mode text color */
+            --light-mode-bg: #f5f5f5; /* Light mode background color */
+            --light-mode-text: #333; /* Light mode text color */
+        }
+
+        /* Dark mode styles */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: var(--dark-mode-bg);
+                color: var(--dark-mode-text);
+            }
+        }
+
+        /* Light mode styles */
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: var(--light-mode-bg);
+                color: var(--light-mode-text);
+            }
+        }
+
+        /* Use Century Gothic font */
+        body {
+            font-family: 'Century Gothic', sans-serif;
+        }
+
+        /* Style the d-pad container */
+        .dpad {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: var(--container-height); /* Use the global variable for container height */
+            border-radius: 10px; /* Rounded corners for the container */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+        }
+
+        /* Style the center button */
+        .dpad .center-button img {
+            width: var(--button-size); /* Use the global variable for button size */
+            height: var(--button-size); /* Use the global variable for button size */
+        }
+
+        /* Style the IP address display */
+        .ip-address {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center;">Virtual Remote Control</h1>
+
+<!-- Display the IP address and button press on the page -->
+<div class="ip-address" id="ip-address">
+    <strong>Remote IP Address:</strong> <code style="font-family: 'Jetbrains Mono', monospace;">{{ remote_ip }}</code>
+</div>
+
+<!-- D-Pad container -->
+<div class="dpad">
+    <!-- Center button (image) -->
+    <div class="center-button" id="center-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 120 120">
+            <!-- Outer circle -->
+            <circle cx="60" cy="60" r="60" fill="#007bff"/>
+
+            <!-- Inner circle -->
+            <circle cx="60" cy="60" r="25" fill="#333"/>
+        </svg>
+    </div>
+</div>
+
+<script>
+    // JavaScript code to handle virtual d-pad interactions
+    // Use AJAX to send the selected direction to the server
+    const centerButton = document.getElementById('center-button');
+    centerButton.addEventListener('click', function (event) {
+        const svg = this.querySelector('svg');
+        const svgRect = svg.getBoundingClientRect();
+        const clickX = event.clientX - svgRect.left;
+        const clickY = event.clientY - svgRect.top;
+
+        // Calculate the position relative to the center
+        const centerX = svgRect.width / 2;
+        const centerY = svgRect.height / 2;
+        const offsetX = clickX - centerX;
+        const offsetY = clickY - centerY;
+
+        // Calculate the distance from the center
+        const distanceFromCenter = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+
+        // Determine the direction based on the distance
+        let direction = 'center';
+
+        if (distanceFromCenter > 25) {
+            if (Math.abs(offsetX) > Math.abs(offsetY)) {
+                if (offsetX > 0) {
+                    direction = 'right';
+                } else {
+                    direction = 'left';
+                }
+            } else {
+                if (offsetY > 0) {
+                    direction = 'down';
+                } else {
+                    direction = 'up';
+                }
+            }
+        }
+
+        // Send the direction to the server
+        sendDirection(direction);
+    });
+
+    function sendDirection(direction) {
+        fetch('/control', {
+            method: 'POST',
+            body: new URLSearchParams({direction}),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        });
+    }
+</script>
+</body>
+</html>
