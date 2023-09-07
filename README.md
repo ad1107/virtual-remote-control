@@ -8,10 +8,10 @@ Useful for [Kodi](https://kodi.tv/) or [Youtube TV*](https://www.youtube.com/tv)
 - No installation required on remote device.
 - D-Pad with responsive controls.
 - Supports dark mode.
+- Includes basic media control keys (Volume controls, Play/Pause functions).
 - Shows IP address in the remote device.
 - Track which buttons were pressed from which IP address using ``--track`` flag.
 - Log IP connections using ``--ip`` flag.
-
 
 # Wishlist
 - Return and Launch button
