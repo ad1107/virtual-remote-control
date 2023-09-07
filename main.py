@@ -1,10 +1,10 @@
-import argparse  # Import the argparse module to handle command-line arguments
-import logging
-import socket
-import sys
+import argparse  # Flag support
+import logging  # Disable logs
+import socket  # Web support
+import sys  # Supress output
 
-import pyautogui
-from flask import Flask, render_template, request
+import pyautogui  # Control system
+from flask import Flask, render_template, request  # Web support
 
 print("Virtual Remote Control")
 print("Press Ctrl-C at any time to stop the program.")
@@ -24,7 +24,7 @@ GREEN = "\033[32m"
 RESET = "\033[0m"
 
 
-def is_internet_connected():
+def check_internet():
     try:
         socket.create_connection(("8.8.8.8", 53), timeout=5)
         return True
@@ -45,12 +45,19 @@ def get_local_ip():
 
 
 # No Internet connection
-if not is_internet_connected():
+if not check_internet():
     print(RED + "An error has occurred. Please check your Internet connection." + RESET)
+    input("Press Enter to exit...")
     sys.exit(1)
 
 # Call the function to get the local IP address
 local_ip = get_local_ip()
+
+# Check if local IP is available
+if local_ip is None:
+    print(RED + "An error has occurred. Local IP address not found." + RESET)
+    input("Press Enter to exit...")
+    sys.exit(1)
 
 # Initialize web app
 app = Flask(__name__)
@@ -100,4 +107,8 @@ port = 8080
 if args.track: print(GREEN + "Button tracking is enabled." + RESET)
 print(GREEN + "Internet is connected." + RESET)
 print(GREEN + "Connect to this address from your phone: " + RESET + "http://" + local_ip + ":" + str(port))
-app.run(host=local_ip, port=port, debug=False, threaded=True, processes=1)
+try:
+    app.run(host=local_ip, port=port, debug=False, threaded=True, processes=1)
+except KeyboardInterrupt:
+    pass
+input("Press Enter to exit...")
