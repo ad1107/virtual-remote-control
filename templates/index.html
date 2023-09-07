@@ -53,6 +53,20 @@
             height: var(--button-size); /* Use the global variable for button size */
         }
 
+        /* Style the back button */
+        .back-button {
+            width: 40px; /* Adjust the button size */
+            height: 40px; /* Adjust the button size */
+            border-radius: 50%; /* Make the button circular */
+            background-color: #ff0000; /* Red background color */
+            color: #fff; /* White text color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px; /* Adjust the font size */
+            cursor: pointer; /* Show pointer cursor on hover */
+        }
+
         /* Style the IP address display */
         .ip-address {
             text-align: center;
@@ -78,12 +92,17 @@
             <circle cx="60" cy="60" r="60" fill="#007bff"></circle>
 
             <!-- Inner circle -->
-            <circle cx="60" cy="60" r="25" fill="#333"></circle>
+            <circle cx="60" cy="60" r="35" fill="#333"></circle>
         </svg>
     </div>
+
+    <!-- Back button -->
+    <button class="back-button" onclick="sendDirection('back')">B</button>
 </div>
 
 <script>
+    //Linking the center button size
+    const centerButtonSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--button-size'));
     // JavaScript code to handle virtual d-pad interactions
     // Use AJAX to send the selected direction to the server
     const centerButton = document.getElementById('center-button');
@@ -105,7 +124,8 @@
         // Determine the direction based on the distance
         let direction = 'center';
 
-        if (distanceFromCenter > 25) {
+        // Automatic center padding
+        if (distanceFromCenter > centerButtonSize) {
             if (Math.abs(offsetX) > Math.abs(offsetY)) {
                 if (offsetX > 0) {
                     direction = 'right';
