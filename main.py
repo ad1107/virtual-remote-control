@@ -12,6 +12,7 @@ print("Press Ctrl-C at any time to stop the program.")
 # Define and parse command-line arguments
 parser = argparse.ArgumentParser(description="Virtual Remote Control")
 parser.add_argument("--track", action="store_true", help="Enable tracking mode")
+parser.add_argument("--ip", action="store_true", help="Enable IP Viewing mode")
 args = parser.parse_args()
 
 # Disable unnecessary logs
@@ -47,7 +48,7 @@ def get_local_ip():
 # No Internet connection
 if not check_internet():
     print(RED + "An error has occurred. Please check your Internet connection." + RESET)
-    input("Press Enter to exit...")
+    input("Press any key to exit...")
     sys.exit(1)
 
 # Call the function to get the local IP address
@@ -56,7 +57,7 @@ local_ip = get_local_ip()
 # Check if local IP is available
 if local_ip is None:
     print(RED + "An error has occurred. Local IP address not found." + RESET)
-    input("Press Enter to exit...")
+    input("Press any key to exit...")
     sys.exit(1)
 
 # Initialize web app
@@ -83,7 +84,12 @@ def control():
         'down': 'down',
         'left': 'left',
         'right': 'right',
-        'center': 'enter'
+        'center': 'enter',
+        'volume-up': 'volumeup',
+        'volume-down': 'volumedown',
+        'mute': 'volumemute',
+        'back': 'esc',
+        'play-pause': 'playpause'
     }
 
     # Press the corresponding arrow key
@@ -93,6 +99,10 @@ def control():
         remote_ip = request.remote_addr
 
         # Check if the user is connected and print the message accordingly
+        if args.ip:
+            if remote_ip not in connected_users:
+                print(f"IP: {remote_ip} has connected")
+                connected_users[remote_ip] = True
         if args.track:
             if remote_ip in connected_users:
                 print(f"IP: {remote_ip} - {direction}")
@@ -105,10 +115,7 @@ def control():
 
 port = 8080
 if args.track: print(GREEN + "Button tracking is enabled." + RESET)
+if args.ip: print(GREEN + "IP logging is enabled." + RESET)
 print(GREEN + "Internet is connected." + RESET)
 print(GREEN + "Connect to this address from your phone: " + RESET + "http://" + local_ip + ":" + str(port))
-try:
-    app.run(host=local_ip, port=port, debug=False, threaded=True, processes=1)
-except KeyboardInterrupt:
-    pass
-input("Press Enter to exit...")
+app.run(host=local_ip, port=port, debug=False, threaded=True, processes=1)
