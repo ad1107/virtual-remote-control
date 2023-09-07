@@ -5,10 +5,13 @@ Useful for [Kodi](https://kodi.tv/) or [Youtube TV*](https://www.youtube.com/tv)
 **For Youtube TV on your web browser, [install this extension](https://chrome.google.com/webstore/detail/youtube-for-tv-4k/pdpkefmdjkgijhnhjkblpielhiikadbb).*
 
 # Features  
+- No installation required on remote device.
 - D-Pad with responsive controls.
 - Supports dark mode.
 - Shows IP address in the remote device.
 - Track which buttons were pressed from which IP address using ``--track`` flag.
+- Log IP connections using ``--ip`` flag.
+
 
 # Wishlist
 - Return and Launch button
