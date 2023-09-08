@@ -2,13 +2,10 @@ import argparse  # Flag support
 import logging  # Disable logs
 import socket  # Web support
 import sys  # Supress output
-
-
 import webbrowser  # Launch YouTube TV
 
-
 import pyautogui  # Control system
-from flask import Flask, render_template, request  # Web support
+from flask import Flask, render_template, request, jsonify  # Web support
 
 print("Virtual Remote Control")
 print("Press Ctrl-C at any time to stop the program.")
@@ -68,12 +65,22 @@ if local_ip is None:
 app = Flask(__name__)
 
 # Dictionary to track connected users by IP address
-connected_users = {}
+connected = {}
+
+# Count connected users so far (not active users)
+connected_users = 0
 
 
 @app.route('/')
 def home():
-    return render_template('index.html', remote_ip=request.remote_addr, local_ip=local_ip)
+    return render_template('index.html', remote_ip=request.remote_addr, local_ip=local_ip,
+                           connected_users=connected_users, machine_name=socket.gethostname())
+
+
+@app.route('/get_connected_users')
+def get_connected_users():
+    # Replace this with the actual logic to calculate connected_users
+    return jsonify(connected_users=connected_users)
 
 
 # Define a route to receive AJAX requests from the virtual d-pad on the phone
@@ -98,10 +105,9 @@ def control():
     }
 
     # Press the corresponding arrow key
-
-
+    global connected_users
     if direction in arrow_keys:
-        if direction== 'launch':
+        if direction == 'launch':
             webbrowser.open("https://youtube.com/tv")  # Launch the website.
         else:
             pyautogui.press(arrow_keys[direction])
@@ -110,16 +116,21 @@ def control():
 
             # Check if the user is connected and print the message accordingly
             if args.ip:
-                if remote_ip not in connected_users:
+                if remote_ip not in connected:
                     print(f"IP: {remote_ip} has connected")
-                    connected_users[remote_ip] = True
+                    connected[remote_ip] = True
+                    connected_users += 1
             if args.track:
-                if remote_ip in connected_users:
+                if remote_ip in connected:
                     print(f"IP: {remote_ip} - {direction}")
                 else:
                     print(f"IP: {remote_ip} has connected")
-                    connected_users[remote_ip] = True
-
+                    connected[remote_ip] = True
+                    connected_users += 1
+            else:
+                if remote_ip not in connected:
+                    connected[remote_ip] = True
+                    connected_users += 1
     return ''
 
 
