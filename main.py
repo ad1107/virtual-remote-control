@@ -2,7 +2,10 @@ import argparse  # Flag support
 import logging  # Disable logs
 import socket  # Web support
 import sys  # Supress output
+
+
 import webbrowser  # Launch YouTube TV
+
 
 import pyautogui  # Control system
 from flask import Flask, render_template, request  # Web support
@@ -70,7 +73,7 @@ connected_users = {}
 
 @app.route('/')
 def home():
-    return render_template('index.html', remote_ip=request.remote_addr)
+    return render_template('index.html', remote_ip=request.remote_addr, local_ip=local_ip)
 
 
 # Define a route to receive AJAX requests from the virtual d-pad on the phone
@@ -96,12 +99,9 @@ def control():
 
     # Press the corresponding arrow key
 
-    if direction in arrow_keys:
-        if direction == 'launch':
-            webbrowser.open("https://youtube.com/tv")  # Launch the website.
 
     if direction in arrow_keys:
-        if arrow_keys[direction] == 'launch':
+        if direction== 'launch':
             webbrowser.open("https://youtube.com/tv")  # Launch the website.
         else:
             pyautogui.press(arrow_keys[direction])
