@@ -9,14 +9,15 @@ Useful for [Kodi](https://kodi.tv/) or [Youtube TV*](https://www.youtube.com/tv)
 - D-Pad with responsive controls.
 - Supports dark mode.
 - Includes basic media control keys (Volume controls, Play/Pause functions).
+- Convenient Youtube TV launch button.
 - Shows IP address in the remote device.
 - Track which buttons were pressed from which IP address using ``--track`` flag.
 - Log IP connections using ``--ip`` flag.
 
 # Wishlist
-- Return and Launch button
 - Track number of users
 - Keyboard and mouse input, (hopefully will add clipboard support too)
+- Extra media metadata informations.
 
 # Using the program
 - Download the latest version from the ``Releases`` page. 
