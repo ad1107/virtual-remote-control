@@ -14,17 +14,16 @@ Useful for [Kodi](https://kodi.tv/) or [Youtube TV*](https://www.youtube.com/tv)
 - Track which buttons were pressed from which IP address using ``--track`` flag.
 - Log IP connections using ``--ip`` flag.
 
-
 # Wishlist
-- Keyboard and mouse input, (hopefully will add clipboard support too)
+- Keyboard and mouse input, clipboard support (may exist as a future repo)
 - Extra media metadata informations.
 
 # Using the program
 - Download the latest version from the ``Releases`` page.
 - Check your Internet connection and Firewall settings from both your remote and target devices and enter the IP (Website) appears in the terminal.
 
-
 # Using the source code
 Download the source code and open the project using your desired environment.\
+Build using ``build.bat`` and enter the version number.\
 Make sure to install all the required Python libraries:
 ``argparse``, ``logging``, ``socket``, ``webbrowser``, ``pyautogui``, ``flask``
