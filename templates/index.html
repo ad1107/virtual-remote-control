@@ -111,7 +111,7 @@
             height: 50px; /* Adjust the button size */
             margin-right: 50px; /* Adjust the margin between the buttons */
             border-radius: 10px; /* Make the button circular */
-            background-color: #007bff; /* Blue background color */
+            background-color: #bb3e03; /* Blue background color */
             color: #fff; /* White text color */
             font-size: 14px; /* Adjust the font size */
             cursor: pointer; /* Show pointer cursor on hover */
@@ -122,7 +122,7 @@
             width: 100px; /* Adjust the button size */
             height: 50px; /* Adjust the button size */
             border-radius: 10px; /* Rounded corners */
-            background-color: #007bff; /* Blue background color */
+            background-color: #ff006e; /* Blue background color */
             color: #fff; /* White text color */
             font-size: 14px; /* Adjust the font size */
             cursor: pointer; /* Show pointer cursor on hover */
@@ -145,7 +145,11 @@
     <strong>Remote IP Address:</strong> <code
         style="font-family: 'Jetbrains Mono', monospace;">{{ remote_ip }}</code><br>
     <strong>Target IP Address:</strong> <code
-        style="font-family: 'Jetbrains Mono', monospace;">{{ local_ip }}</code>
+        style="font-family: 'Jetbrains Mono' , monospace;">{{ local_ip }}</code><br>
+    <strong>Target Machine Name:</strong> <code
+        style="font-family: 'Jetbrains Mono' , monospace;">{{ machine_name }}</code><br>
+    <strong>Users Connected: </strong><code id="connected-users"
+                                            style="font-family: 'Jetbrains Mono', monospace;">{{ connected_users }}</code>
 </div>
 
 <!-- D-Pad container -->
@@ -230,6 +234,22 @@
         // Send the direction to the server
         sendDirection(direction);
     });
+
+    function updateConnectedUsers() {
+        fetch('/get_connected_users')
+            .then(response => response.json())
+            .then(data => {
+                // Update the HTML element with the new value
+                document.getElementById('connected-users').textContent = data.connected_users;
+            })
+            .catch(error => {
+                console.error('Error fetching connected_users:', error);
+            });
+    }
+
+    // Update number of connected users
+    updateConnectedUsers();
+    setInterval(updateConnectedUsers, 500);
 
     function sendDirection(direction) {
         fetch('/control', {
