@@ -4,7 +4,7 @@ Useful for [Kodi](https://kodi.tv/) or [Youtube TV*](https://www.youtube.com/tv)
 \
 **For Youtube TV on your web browser, [install this extension](https://chrome.google.com/webstore/detail/youtube-for-tv-4k/pdpkefmdjkgijhnhjkblpielhiikadbb).*
 
-# Features  
+# Features
 - No installation required on remote device.
 - D-Pad with responsive controls.
 - Supports dark mode.
@@ -14,15 +14,17 @@ Useful for [Kodi](https://kodi.tv/) or [Youtube TV*](https://www.youtube.com/tv)
 - Track which buttons were pressed from which IP address using ``--track`` flag.
 - Log IP connections using ``--ip`` flag.
 
+
 # Wishlist
-- Track number of users
 - Keyboard and mouse input, (hopefully will add clipboard support too)
 - Extra media metadata informations.
 
 # Using the program
-- Download the latest version from the ``Releases`` page. 
+- Download the latest version from the ``Releases`` page.
 - Check your Internet connection and Firewall settings from both your remote and target devices and enter the IP (Website) appears in the terminal.
 
-# Using the source code  
+
+# Using the source code
 Download the source code and open the project using your desired environment.\
-Make sure to install all the required Python libraries.
+Make sure to install all the required Python libraries:
+``argparse``, ``logging``, ``socket``, ``webbrowser``, ``pyautogui``, ``flask``
