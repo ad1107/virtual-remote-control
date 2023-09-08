@@ -5,10 +5,14 @@ import sys  # Supress output
 import webbrowser  # Launch YouTube TV
 
 import pyautogui  # Control system
+from colorama import init, Fore, Style, Back  # Text color support
 from flask import Flask, render_template, request, jsonify  # Web support
 
-print("Virtual Remote Control")
-print("Press Ctrl-C at any time to stop the program.")
+# Initialize colorama (only required once)
+init(autoreset=True)
+
+print(Fore.WHITE + Style.BRIGHT + Back.BLUE + "Virtual Remote Control" + Style.RESET_ALL)
+print(Fore.CYAN + "Press Ctrl-C at any time to stop the program." + Style.RESET_ALL)
 
 # Define and parse command-line arguments
 parser = argparse.ArgumentParser(description="Virtual Remote Control")
@@ -19,11 +23,6 @@ args = parser.parse_args()
 # Disable unnecessary logs
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
-
-# ANSI Color Codes:
-RED = "\033[31m"
-GREEN = "\033[32m"
-RESET = "\033[0m"
 
 
 def check_internet():
@@ -48,8 +47,8 @@ def get_local_ip():
 
 # No Internet connection
 if not check_internet():
-    print(RED + "An error has occurred. Please check your Internet connection." + RESET)
-    input("Press any key to exit...")
+    print(Fore.RED + "An error has occurred. Please check your Internet connection." + Style.RESET_ALL)
+    input(Fore.YELLOW + "Press any key to exit..." + Style.RESET_ALL)
     sys.exit(1)
 
 # Call the function to get the local IP address
@@ -57,8 +56,8 @@ local_ip = get_local_ip()
 
 # Check if local IP is available
 if local_ip is None:
-    print(RED + "An error has occurred. Local IP address not found." + RESET)
-    input("Press any key to exit...")
+    print(Fore.RED + "An error has occurred. Local IP address not found" + Style.RESET_ALL)
+    input(Fore.YELLOW + "Press any key to exit..." + Style.RESET_ALL)
     sys.exit(1)
 
 # Initialize web app
@@ -135,8 +134,9 @@ def control():
 
 
 port = 8080
-if args.track: print(GREEN + "Button tracking is enabled." + RESET)
-if args.ip: print(GREEN + "IP logging is enabled." + RESET)
-print(GREEN + "Internet is connected." + RESET)
-print(GREEN + "Connect to this address from your phone: " + RESET + "http://" + local_ip + ":" + str(port))
+if args.track: print(Fore.GREEN + "Button tracking is enabled." + Style.RESET_ALL)
+if args.ip: print(Fore.GREEN + "IP logging is enabled." + Style.RESET_ALL)
+print(Fore.GREEN + "Internet is connected." + Style.RESET_ALL)
+print(
+    Fore.GREEN + "Connect to this address from your phone: " + Style.RESET_ALL + "http://" + local_ip + ":" + str(port))
 app.run(host=local_ip, port=port, debug=False, threaded=True, processes=1)
