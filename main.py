@@ -2,6 +2,7 @@ import argparse  # Flag support
 import logging  # Disable logs
 import socket  # Web support
 import sys  # Supress output
+import webbrowser  # Launch YouTube TV
 
 import pyautogui  # Control system
 from flask import Flask, render_template, request  # Web support
@@ -89,26 +90,35 @@ def control():
         'volume-down': 'volumedown',
         'mute': 'volumemute',
         'back': 'esc',
-        'play-pause': 'playpause'
+        'play-pause': 'playpause',
+        'launch': ''
     }
 
     # Press the corresponding arrow key
+
     if direction in arrow_keys:
-        pyautogui.press(arrow_keys[direction])
+        if direction == 'launch':
+            webbrowser.open("https://youtube.com/tv")  # Launch the website.
 
-        remote_ip = request.remote_addr
+    if direction in arrow_keys:
+        if arrow_keys[direction] == 'launch':
+            webbrowser.open("https://youtube.com/tv")  # Launch the website.
+        else:
+            pyautogui.press(arrow_keys[direction])
 
-        # Check if the user is connected and print the message accordingly
-        if args.ip:
-            if remote_ip not in connected_users:
-                print(f"IP: {remote_ip} has connected")
-                connected_users[remote_ip] = True
-        if args.track:
-            if remote_ip in connected_users:
-                print(f"IP: {remote_ip} - {direction}")
-            else:
-                print(f"IP: {remote_ip} has connected")
-                connected_users[remote_ip] = True
+            remote_ip = request.remote_addr
+
+            # Check if the user is connected and print the message accordingly
+            if args.ip:
+                if remote_ip not in connected_users:
+                    print(f"IP: {remote_ip} has connected")
+                    connected_users[remote_ip] = True
+            if args.track:
+                if remote_ip in connected_users:
+                    print(f"IP: {remote_ip} - {direction}")
+                else:
+                    print(f"IP: {remote_ip} has connected")
+                    connected_users[remote_ip] = True
 
     return ''
 
