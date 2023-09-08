@@ -5,10 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Virtual Remote Control</title>
     <style>
+        .stop-scrolling {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* avoid double tap zooming */
+        * {
+            touch-action: manipulation;
+        }
+
         /* Global button scaling variables */
         :root {
             --button-size: 60px; /* Adjust the button size here */
-            --container-height: 400px; /* Adjust the container height here */
+            --container-height: 450px; /* Adjust the container height here */
             --dark-mode-bg: #595959; /* Dark mode background color */
             --dark-mode-text: #fff; /* Dark mode text color */
             --light-mode-bg: #f5f5f5; /* Light mode background color */
@@ -44,7 +54,7 @@
             flex-direction: column; /* Vertically align buttons */
             height: var(--container-height); /* Use the global variable for container height */
             border-radius: 10px; /* Rounded corners for the container */
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.2); /* Shadow effect */
         }
 
         /* Style the center button */
@@ -63,10 +73,10 @@
 
         /* Style the back button */
         .back-button {
-            width: 50px;
-            height: 50px;
+            width: 100px; /* Adjust the button size */
+            height: 50px; /* Adjust the button size */
             margin-right: 150px; /* Back and Pause buttons split apart size */
-            border-radius: 50%; /* Make the button circular */
+            border-radius: 10px; /* Make the button circular */
             background-color: #ff0000; /* Red background color */
             color: #fff; /* White text color */
             font-size: 14px; /* Adjust the font size */
@@ -75,9 +85,9 @@
 
         /* Style the Play/Pause button */
         .play-pause-button {
-            width: 50px; /* Adjust the button size */
+            width: 100px; /* Adjust the button size */
             height: 50px; /* Adjust the button size */
-            border-radius: 50%; /* Make the button circular */
+            border-radius: 10px; /* Make the button circular */
             background-color: #4caf50; /* Green background color */
             color: #fff; /* White text color */
             font-size: 14px; /* Adjust the font size */
@@ -87,25 +97,36 @@
         /* Style the volume buttons */
         .volume-buttons {
             display: flex;
-            justify-content: flex-end; /* Right-align horizontally */
-            align-items: flex-start; /* Align to the top vertically */
-            width: 100%;
+            justify-content: center; /* Horizontally center buttons */
+            align-items: center; /* Vertically center buttons */
+            width: 80%;
             padding: 20px 0; /* Add padding to separate them from the D-Pad */
-            margin-right: 2200px; /* Shift to try to be centered */
-            margin-top: -20px; /*Shift back on top to try to be centered vertically */
+            margin-left: 50px; /* Shift to the left */
         }
 
 
         /* Style the volume button */
         .volume-button {
-            width: 50px; /* Adjust the button size */
+            width: 100px; /* Adjust the button size */
             height: 50px; /* Adjust the button size */
             margin-right: 50px; /* Adjust the margin between the buttons */
-            border-radius: 50%; /* Make the button circular */
+            border-radius: 10px; /* Make the button circular */
             background-color: #007bff; /* Blue background color */
             color: #fff; /* White text color */
             font-size: 14px; /* Adjust the font size */
             cursor: pointer; /* Show pointer cursor on hover */
+        }
+
+        /* Style the launch button */
+        .launch-button {
+            width: 100px; /* Adjust the button size */
+            height: 50px; /* Adjust the button size */
+            border-radius: 10px; /* Rounded corners */
+            background-color: #007bff; /* Blue background color */
+            color: #fff; /* White text color */
+            font-size: 14px; /* Adjust the font size */
+            cursor: pointer; /* Show pointer cursor on hover */
+
         }
 
         /* Style the IP address display */
@@ -116,7 +137,7 @@
         }
     </style>
 </head>
-<body>
+<body class="stop-scrolling">
 <h1 style="text-align: center;">Virtual Remote Control</h1>
 
 <!-- Display the IP address and button press on the page -->
@@ -126,17 +147,19 @@
 
 <!-- D-Pad container -->
 <div class="dpad">
+
+    <!-- Launch button -->
+    <button class="launch-button" onclick="sendDirection('launch')">Launch</button>
     <!-- Volume buttons container at the top -->
     <div class="volume-buttons">
-        <!-- Volume Up button -->
-        <button class="volume-button" onclick="sendDirection('volume-up')">V+</button>
-
-        <!-- Mute button -->
-        <button class="volume-button" onclick="sendDirection('mute')">M</button>
-
         <!-- Volume Down button -->
         <button class="volume-button" onclick="sendDirection('volume-down')">V-</button>
+        <!-- Mute button -->
+        <button class="volume-button" onclick="sendDirection('mute')">Mute</button>
+        <!-- Volume Up button -->
+        <button class="volume-button" onclick="sendDirection('volume-up')">V+</button>
     </div>
+
 
     <!-- Center button (image) -->
     <div class="center-button" id="center-button">
@@ -152,16 +175,17 @@
     <!-- Additional buttons container -->
     <div class="additional-buttons">
         <!-- Back button -->
-        <button class="back-button" onclick="sendDirection('back')">B</button>
+        <button class="back-button" onclick="sendDirection('back')">Back</button>
 
         <!-- Play/Pause button -->
-        <button class="play-pause-button" onclick="sendDirection('play-pause')">P</button>
+        <button class="play-pause-button" onclick="sendDirection('play-pause')">Pause</button>
     </div>
 </div>
 
 <script>
     // Linking the center button size
     const centerButtonSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--button-size'));
+
     // JavaScript code to handle virtual d-pad interactions
     // Use AJAX to send the selected direction to the server
     const centerButton = document.getElementById('center-button');
@@ -213,6 +237,7 @@
             },
         });
     }
+
 </script>
 </body>
 </html>
