@@ -26,4 +26,4 @@ Useful for [Kodi](https://kodi.tv/) or [Youtube TV*](https://www.youtube.com/tv)
 Download the source code and open the project using your desired environment.\
 Build using ``build.bat`` and enter the version number.\
 Make sure to install all the required Python libraries:
-``argparse``, ``logging``, ``socket``, ``webbrowser``, ``pyautogui``, ``flask``
+``argparse``, ``logging``, ``socket``, ``webbrowser``, ``pyautogui``, ``flask``, ``colorama``
