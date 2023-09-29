@@ -7,7 +7,7 @@ pip install pyinstaller
 cls
 echo Building executable...
 echo:
-pyinstaller --add-data "templates;templates" --onefile main.py
+pyinstaller --onefile --add-data "icon/*.ico;icon" --icon=icon\\icon.ico main.py
 cls
 echo Moving file to root destination...
 echo:
@@ -15,7 +15,7 @@ cd dist
 move main.exe ..
 cd ..
 rmdir dist
-ren main.exe virtual-remote-control-%ver%.exe 
+ren main.exe WirelessKeyQR-%ver%.exe
 del *.spec /s /q /f
 rmdir build /s /f
 cls
