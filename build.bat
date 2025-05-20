@@ -1,24 +1,73 @@
 @echo off
-set /p ver=Enter version number:
+setlocal
+
+set SCRIPT_NAME=main.py
+set BASE_NAME=main
+set APP_NAME=virtual-remote-control
+set TEMPLATES_DIR=templates
+
+set /p ver="Enter version number: "
+if "%ver%"=="" (
+    echo [ERROR] Version number cannot be empty.
+    goto :error_exit
+)
 cls
-echo Installing PyInstaller...
-echo:
-pip install pyinstaller
+
+echo [INFO] Checking for Python...
+python --version > nul 2>&1
+if errorlevel 1 (
+    echo [ERROR] Python not found in PATH. Please ensure Python is installed and added to PATH.
+    goto :error_exit
+)
+
+echo [INFO] Ensuring Nuitka and required packages are installed...
+pip install --upgrade nuitka zstandard ordered-set || (
+    echo [ERROR] Failed to install/update Nuitka or its dependencies.
+    goto :error_exit
+)
 cls
-echo Building executable...
-echo:
-pyinstaller --add-data "templates;templates" --onefile main.py
+
+echo [INFO] Building executable with Nuitka (this may take some time)...
+
+python -m nuitka ^
+    --onefile ^
+    --standalone ^
+    --include-data-dir=%TEMPLATES_DIR%=%TEMPLATES_DIR% ^
+    --include-package=flask ^
+    --include-package=colorama ^
+    --include-package=pyautogui ^
+    --follow-imports ^
+    --output-filename="%APP_NAME%-%ver%.exe" ^
+    "%SCRIPT_NAME%"
+
+if errorlevel 1 (
+    echo [ERROR] Nuitka build process failed. Check the output above for details.
+    goto :error_exit
+)
 cls
-echo Moving file to root destination...
-echo:
-cd dist
-move main.exe ..
-cd ..
-rmdir dist
-ren main.exe virtual-remote-control-%ver%.exe 
-del *.spec /s /q /f
-rmdir build /s /f
+
+if not exist "%APP_NAME%-%ver%.exe" (
+    echo [ERROR] Build seemed to succeed, but the final executable "%APP_NAME%-%ver%.exe" was not found.
+    goto :error_exit
+)
+
+echo [INFO] Cleaning up build artifacts...
+if exist "%BASE_NAME%.build" rmdir /s /q "%BASE_NAME%.build"
+if exist "%BASE_NAME%.onefile-build" rmdir /s /q "%BASE_NAME%.onefile-build"
+if exist "%BASE_NAME%.dist" rmdir /s /q "%BASE_NAME%.dist"
+del /q *.pyi > nul 2>&1
+del /q *.nuitka > nul 2>&1
+
 cls
-echo Complete building version %ver%.
-echo:
+echo [SUCCESS] Build complete: %APP_NAME%-%ver%.exe
+echo Located in the project root directory.
+goto :end
+
+:error_exit
+echo [INFO] Build process terminated due to errors.
 pause
+exit /b 1
+
+:end
+pause
+exit /b 0
