@@ -1,4 +1,4 @@
 Flask==2.3.3
-Werkzeug==2.3.7
+Werkzeug==3.0.6
 pyautogui==0.9.53
 colorama==0.4.4
